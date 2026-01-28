@@ -1,0 +1,630 @@
+<!doctype html>
+<html lang="id" class="h-full">
+ <head>
+    <title>PEMIRA KAMPUS 4</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pemilihan Ketua BEM - Universitas Darunnajah Kampus 4</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+  <style>
+    
+    body {
+      box-sizing: border-box;
+    }
+    * {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+    .gradient-navy {
+      background: linear-gradient(135deg, #0a1628 0%, #1e3a5f 50%, #0d2137 100%);
+    }
+    .card-gradient {
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+    }
+    .number-badge {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+      box-shadow: 0 4px 15px rgba(30, 58, 95, 0.4);
+    }
+    .photo-frame {
+      background: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+      padding: 4px;
+    }
+    .nav-blur {
+      backdrop-filter: blur(10px);
+      background: rgba(10, 22, 40, 0.9);
+    }
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    @keyframes pulse-slow {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    .animate-fade-in {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+    .animate-delay-1 { animation-delay: 0.1s; }
+    .animate-delay-2 { animation-delay: 0.2s; }
+    .animate-delay-3 { animation-delay: 0.3s; }
+    .animate-delay-4 { animation-delay: 0.4s; }
+    .card-hover {
+      transition: all 0.3s ease;
+    }
+    .card-hover:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(30, 58, 95, 0.2);
+    }
+    .scroll-smooth {
+      scroll-behavior: smooth;
+    }
+  </style>
+  <style>@view-transition { navigation: auto; }</style>
+ </head>
+ <script>
+let daftarPemilih = JSON.parse(localStorage.getItem("daftarPemilih")) || [];
+let votes = JSON.parse(localStorage.getItem("votes")) || {
+  1: 0,
+  2: 0,
+  3: 0,
+  4: 0
+};
+
+function login(){
+  const nim = document.getElementById("nim").value.trim();
+  const semester = document.getElementById("semester").value;
+
+  if(!nim || !semester){
+    alert("NIM dan Semester wajib diisi");
+    return;
+  }
+
+  const identitas = `${nim}-S${semester}`;
+
+  if(daftarPemilih.includes(identitas)){
+    alert("NIM dengan semester ini sudah digunakan untuk memilih");
+    return;
+  }
+
+  localStorage.setItem("nimAktif", identitas);
+
+  // TUTUP LOGIN
+  document.getElementById("loginPage").style.display = "none";
+}
+</script>
+ <body class="h-full scroll-smooth"> 
+  <!-- LOGIN OVERLAY -->
+<div id="loginPage"
+  class="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 backdrop-blur-sm">
+
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl">
+    <h2 class="text-xl font-bold text-center mb-4 text-[#1e3a5f]">
+      Login Pemilih
+    </h2>
+
+    <input id="nim" type="text" placeholder="Masukkan NIM"
+  class="w-full border border-slate-300 rounded-lg p-3 mb-3 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]">
+
+<select id="semester"
+  class="w-full border border-slate-300 rounded-lg p-3 mb-4 focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]">
+  <option value="">Pilih Semester</option>
+  <option value="1">Semester 1</option>
+  <option value="3">Semester 3</option>
+  <option value="5">Semester 5</option>
+  <option value="7">Semester 7</option>
+</select>
+
+    <button onclick="login()"
+      class="w-full bg-[#1e3a5f] hover:bg-[#0d2137] text-white font-bold py-3 rounded-lg transition">
+      Masuk & Pilih
+    </button>
+  </div>
+</div>
+  <div id="app-wrapper" class="w-full h-full overflow-auto"><!-- Navigation -->
+   <nav class="fixed top-0 left-0 right-0 z-50 nav-blur border-b border-white/10">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+     <div class="flex items-center gap-3"><!-- Logo BEM -->
+      <div class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center">
+       <svg class="w-6 h-6 text-white" viewbox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+       <img src="logobem.png" />
+      </div><span class="text-white font-bold text-sm">BEM UDN KAMPUS 4</span>
+     </div><a href="#calon" class="bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-4 py-2 rounded-full transition-all"> Lihat Calon </a>
+    </div>
+   </nav><!-- Hero Section -->
+   <header class="gradient-navy min-h-screen flex items-center justify-center relative overflow-hidden py-20"><!-- Decorative Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+     <div class="absolute top-10 left-5 w-40 h-40 bg-blue-400/10 rounded-full blur-2xl"></div>
+     <div class="absolute bottom-10 right-5 w-48 h-48 bg-blue-300/10 rounded-full blur-2xl"></div>
+    </div><!-- Grid Pattern -->
+    <div class="absolute inset-0 opacity-5">
+     <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg"><defs>
+       <pattern id="grid" width="30" height="30" patternunits="userSpaceOnUse">
+        <path d="M 30 0 L 0 0 0 30" fill="none" stroke="white" stroke-width="1" />
+       </pattern>
+      </defs> <rect width="100%" height="100%" fill="url(#grid)" />
+     </svg>
+    </div>
+    <div class="relative z-10 text-center px-5 w-full max-w-md mx-auto"><!-- Logo -->
+     <div class="mb-6 animate-fade-in">
+      <div class="w-24 h-24 mx-auto bg-white/10 rounded-xl p-3 backdrop-blur-sm border border-white/20 shadow-2xl">
+        </text>
+       <img src="logobem.png"
+     alt="Logo BEM"
+     class="w-26 h-18 object-contain">
+      </div>
+     </div><!-- Badge -->
+     <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full mb-4 animate-fade-in animate-delay-1"><span class="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse"></span> <span class="text-emerald-300 text-xs font-medium">Pemilihan Resmi 2026</span>
+     </div><!-- Main Title -->
+     <h1 id="main-title" class="text-2xl font-extrabold text-white mb-3 leading-tight animate-fade-in animate-delay-2">Pemilihan Ketua BEM<br><span class="text-blue-300">Universitas Darunnajah</span><br>
+       Kampus 4</h1><!-- Subtitle -->
+     <p id="subtitle" class="text-lg text-blue-200 font-semibold mb-4 animate-fade-in animate-delay-3">Periode 2026</p><!-- Description -->
+     <p class="text-blue-100/80 text-sm px-3 mb-6 animate-fade-in animate-delay-4">Gunakan hak suaramu untuk memilih pemimpin terbaik yang akan membawa perubahan positif bagi seluruh mahasiswa</p><!-- CTA Button --> <a href="#calon" class="inline-flex items-center gap-2 bg-white text-[#1e3a5f] font-bold px-6 py-3 rounded-full text-base shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all animate-fade-in animate-delay-4"> <span>Kenali Calon</span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg></a> <!-- Stats -->
+     <div class="grid grid-cols-3 gap-3 mt-8 animate-fade-in animate-delay-4">
+      <div class="text-center">
+       <div class="text-2xl font-bold text-white">
+        4
+       </div>
+       <div class="text-blue-200/70 text-xs">
+        Calon
+       </div>
+      </div>
+      <div class="text-center border-x border-white/20">
+       <div class="text-2xl font-bold text-white">
+        2026
+       </div>
+       <div class="text-blue-200/70 text-xs">
+        Periode
+       </div>
+      </div>
+      <div class="text-center">
+       <div class="text-2xl font-bold text-white">
+        1
+       </div>
+       <div class="text-blue-200/70 text-xs">
+        Suara
+       </div>
+      </div>
+     </div>
+    </div><!-- Scroll Indicator -->
+    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 animate-bounce">
+     <svg class="w-5 h-5 text-white/50" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+     </svg>
+    </div>
+   </header><!-- Candidates Section -->
+   <section id="calon" class="py-10 bg-gradient-to-b from-slate-50 to-white">
+    <div class="max-w-2xl mx-auto px-4"><!-- Section Header -->
+     <div class="text-center mb-8"><span class="inline-block bg-[#1e3a5f]/10 text-[#1e3a5f] text-xs font-semibold px-3 py-1.5 rounded-full mb-3"> Calon Ketua BEM </span>
+      <h2 class="text-xl font-extrabold text-[#0a1628] mb-2">Kenali Visi &amp; Misi Mereka</h2>
+      <p class="text-slate-600 text-sm px-4">Pelajari visi dan misi setiap calon untuk menentukan pilihan terbaikmu</p>
+     </div><!-- Candidates Grid -->
+     <div class="grid gap-6"><!-- Candidate 1 -->
+      <article class="card-gradient rounded-2xl shadow-lg overflow-hidden card-hover opacity-0 animate-fade-in animate-delay-1" style="animation-fill-mode: forwards;">
+       <div class="flex flex-col"><!-- Photo Side -->
+        <div class="p-5 flex items-center gap-4 bg-gradient-to-br from-[#1e3a5f]/5 to-transparent border-b border-slate-200">
+         <div class="relative flex-shrink-0">
+          <div class="number-badge w-10 h-10 rounded-full flex items-center justify-center text-white text-lg font-bold">
+           1
+          </div>
+         </div>
+         <div class="relative flex-shrink-0">
+          <div class="photo-frame rounded-xl">
+           <div class="w-20 h-24 bg-slate-200 rounded-lg flex items-center justify-center overflow-hidden"><!-- GANTI URL FOTO CALON 1 DI BAWAH INI --> <img src="A7C01029.jpg" alt="Hamdan Hasibuan" loading="lazy" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <svg class="w-10 h-10 text-slate-400" style="display:none;" fill="currentColor" viewbox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+           </div>
+          </div>
+         </div>
+         <div class="flex-1">
+          <h3 class="text-base font-bold text-[#0a1628]">Hamdan Hasibuan</h3><span class="text-[#1e3a5f] text-xs font-medium">Calon No. 1</span>
+         </div>
+        </div><!-- Content Side -->
+        <div class="p-5"><!-- Visi -->
+         <div class="mb-4">
+          <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 bg-[#1e3a5f] rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+           </div>
+           <h4 class="text-sm font-bold text-[#0a1628]">Visi</h4>
+          </div>
+          <p class="text-slate-700 leading-relaxed text-sm">Mewujudkan Badan Eksekutif Mahasiswa Universitas Darunnajah Kampus 4 yang konsisten, bertanggung jawab, dan berdampak nyata melalui penguatan dan optimalisasi program kerja yang telah ada.</p>
+         </div><!-- Misi -->
+         <div>
+          <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 bg-[#1e3a5f] rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+           </div>
+           <h4 class="text-sm font-bold text-[#0a1628]">Misi</h4>
+          </div>
+          <ul class="space-y-2">
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Memaksimalkan pelaksanaan program kerja yang telah berjalan melalui perencanaan yang matang, pelaksanaan yang terukur, serta evaluasi berkelanjutan agar setiap program memberikan dampak nyata.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Meningkatkan kedisiplinan, profesionalisme, dan koordinasi pengurus BEM agar seluruh program kerja terlaksana secara efektif, berkelanjutan, dan sesuai dengan kebutuhan mahasiswa Kampus 4.</span></li>
+          </ul>
+         </div><!-- Vote Button -->
+         <div class="mt-4 pt-4 border-t border-slate-200"><button onclick="pilihCalon(1)" class="w-full bg-gradient-to-r from-[#1e3a5f] to-[#2d5a87] hover:from-[#0d2137] hover:to-[#1e3a5f] text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg><span>PILIH CALON INI</span> </button>
+         </div>
+        </div>
+       </div>
+      </article><!-- Candidate 2 -->
+      <article class="card-gradient rounded-2xl shadow-lg overflow-hidden card-hover opacity-0 animate-fade-in animate-delay-2" style="animation-fill-mode: forwards;">
+       <div class="flex flex-col"><!-- Photo Side -->
+        <div class="p-5 flex items-center gap-4 bg-gradient-to-br from-[#1e3a5f]/5 to-transparent border-b border-slate-200">
+         <div class="relative flex-shrink-0">
+          <div class="number-badge w-10 h-10 rounded-full flex items-center justify-center text-white text-lg font-bold">
+           2
+          </div>
+         </div>
+         <div class="relative flex-shrink-0">
+          <div class="photo-frame rounded-xl">
+           <div class="w-20 h-24 bg-slate-200 rounded-lg flex items-center justify-center overflow-hidden"><!-- GANTI URL FOTO CALON 2 DI BAWAH INI --> <img src="A7C01017.jpg" alt="Nanda Abid Muqsith" loading="lazy" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <svg class="w-10 h-10 text-slate-400" style="display:none;" fill="currentColor" viewbox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+           </div>
+          </div>
+         </div>
+         <div class="flex-1">
+          <h3 class="text-base font-bold text-[#0a1628]">Nanda Abid Muqsith</h3><span class="text-[#1e3a5f] text-xs font-medium">Calon No. 2</span>
+         </div>
+        </div><!-- Content Side -->
+        <div class="p-5"><!-- Visi -->
+         <div class="mb-4">
+          <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 bg-[#1e3a5f] rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+           </div>
+           <h4 class="text-sm font-bold text-[#0a1628]">Visi</h4>
+          </div>
+          <p class="text-slate-700 leading-relaxed text-sm">Terwujudnya BEM yang aktif, inklusif, dan berdampak, sebagai ruang kebersamaan dan pengabdian mahasiswa.</p>
+         </div><!-- Misi -->
+         <div>
+          <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 bg-[#1e3a5f] rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+           </div>
+           <h4 class="text-sm font-bold text-[#0a1628]">Misi</h4>
+          </div>
+          <ul class="space-y-2">
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Menjadikan BEM sebagai organisasi yang humanis, menarik dan seru, sehingga, partisipasi mahasiswa tumbuh secara sukarela, antusias, dan penuh tanggung jawab.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Membangun kolaborasi dan solidaritas mahasiswa, untuk gerakan yang nyata, dan bermanfaat.</span></li>
+          </ul>
+         </div><!-- Vote Button -->
+         <div class="mt-4 pt-4 border-t border-slate-200"><button onclick="pilihCalon(2)" class="w-full bg-gradient-to-r from-[#1e3a5f] to-[#2d5a87] hover:from-[#0d2137] hover:to-[#1e3a5f] text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg><span>PILIH CALON INI</span> </button>
+         </div>
+        </div>
+       </div>
+      </article><!-- Candidate 3 -->
+      <article class="card-gradient rounded-2xl shadow-lg overflow-hidden card-hover opacity-0 animate-fade-in animate-delay-3" style="animation-fill-mode: forwards;">
+       <div class="flex flex-col"><!-- Photo Side -->
+        <div class="p-5 flex items-center gap-4 bg-gradient-to-br from-[#1e3a5f]/5 to-transparent border-b border-slate-200">
+         <div class="relative flex-shrink-0">
+          <div class="number-badge w-10 h-10 rounded-full flex items-center justify-center text-white text-lg font-bold">
+           3
+          </div>
+         </div>
+         <div class="relative flex-shrink-0">
+          <div class="photo-frame rounded-xl">
+           <div class="w-20 h-24 bg-slate-200 rounded-lg flex items-center justify-center overflow-hidden"><!-- GANTI URL FOTO CALON 3 DI BAWAH INI --> <img src="A7C01011.jpg" alt="Nurul Rizki" loading="lazy" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <svg class="w-10 h-10 text-slate-400" style="display:none;" fill="currentColor" viewbox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+           </div>
+          </div>
+         </div>
+         <div class="flex-1">
+          <h3 class="text-base font-bold text-[#0a1628]">Nurul Rizki</h3><span class="text-[#1e3a5f] text-xs font-medium">Calon No. 3</span>
+         </div>
+        </div><!-- Content Side -->
+        <div class="p-5"><!-- Visi -->
+         <div class="mb-4">
+          <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 bg-[#1e3a5f] rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+           </div>
+           <h4 class="text-sm font-bold text-[#0a1628]">Visi</h4>
+          </div>
+          <p class="text-slate-700 leading-relaxed text-sm">Membentuk Mahasiswa/i yg kreatif, inspiratif, solid dan berintegritas tinggi sebagai penggerak utama guna meningkatkan kualitas kampus menjadi lebih baik melalui kegiatan² yang positif dan produktif dengan tetap menjunjung tinggi akhlakul karimah.</p>
+         </div><!-- Misi -->
+         <div>
+          <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 bg-[#1e3a5f] rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+           </div>
+           <h4 class="text-sm font-bold text-[#0a1628]">Misi</h4>
+          </div>
+          <ul class="space-y-2">
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Membentuk generasi mahasiswa yang berakhlakul karimah dan berintegritas dalam kehidupan kampus maupun bermasyarakat.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Membangun dan mempererat hubungan yang harmonis, komunikatif, dan kolaboratif antara mahasiswa dan dosen guna menciptakan iklim akademik yang kondusif.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Mendorong peningkatan kreativitas serta inovasi mahasiswa yang inspiratif dan berdaya saing, baik dalam bidang akademik maupun non-akademik.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Menyelenggarakan berbagai kegiatan positif dan berkelanjutan sebagai wadah pengembangan potensi mahasiswa untuk menunjang pengembangan diri.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Membuat kampus 4 menjadi layaknya keluarga yang menjadi wadah berkonsultasi maupun untuk meningkatkan kompetensi dan prestasi.</span></li>
+          </ul>
+         </div><!-- Vote Button -->
+         <div class="mt-4 pt-4 border-t border-slate-200"><button onclick="pilihCalon(3)" class="w-full bg-gradient-to-r from-[#1e3a5f] to-[#2d5a87] hover:from-[#0d2137] hover:to-[#1e3a5f] text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg><span>PILIH CALON INI</span> </button>
+         </div>
+        </div>
+       </div>
+      </article><!-- Candidate 4 -->
+      <article class="card-gradient rounded-2xl shadow-lg overflow-hidden card-hover opacity-0 animate-fade-in animate-delay-4" style="animation-fill-mode: forwards;">
+       <div class="flex flex-col"><!-- Photo Side -->
+        <div class="p-5 flex items-center gap-4 bg-gradient-to-br from-[#1e3a5f]/5 to-transparent border-b border-slate-200">
+         <div class="relative flex-shrink-0">
+          <div class="number-badge w-10 h-10 rounded-full flex items-center justify-center text-white text-lg font-bold">
+           4
+          </div>
+         </div>
+         <div class="relative flex-shrink-0">
+          <div class="photo-frame rounded-xl">
+           <div class="w-20 h-24 bg-slate-200 rounded-lg flex items-center justify-center overflow-hidden"><!-- GANTI URL FOTO CALON 4 DI BAWAH INI --> <img src="A7C00999.jpg" alt="Ana Dwiyanti Pratiwi" loading="lazy" class="w-full h-full object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <svg class="w-10 h-10 text-slate-400" style="display:none;" fill="currentColor" viewbox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+            </svg>
+           </div>
+          </div>
+         </div>
+         <div class="flex-1">
+          <h3 class="text-base font-bold text-[#0a1628]">Ana Dwiyanti Pratiwi</h3><span class="text-[#1e3a5f] text-xs font-medium">Calon No. 4</span>
+         </div>
+        </div><!-- Content Side -->
+        <div class="p-5"><!-- Visi -->
+         <div class="mb-4">
+          <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 bg-[#1e3a5f] rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /> <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+            </svg>
+           </div>
+           <h4 class="text-sm font-bold text-[#0a1628]">Visi</h4>
+          </div>
+          <div class="text-slate-700 leading-relaxed text-sm space-y-2">
+           <p>Membangun BEM yang aktif, responsif dan aspiratif dalam mewujudkan kesejahteraan mahasiswa dan meningkatkan kualitas pendidikan di Universitas Darunnajah.</p>
+           <p>Membentuk mahasiswa untuk berdedikasi tinggi dan juga sifat loyalitas yang luas untuk Universitas Darunnajah.</p>
+          </div>
+         </div><!-- Misi -->
+         <div>
+          <div class="flex items-center gap-2 mb-2">
+           <div class="w-6 h-6 bg-[#1e3a5f] rounded-lg flex items-center justify-center flex-shrink-0">
+            <svg class="w-3 h-3 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+            </svg>
+           </div>
+           <h4 class="text-sm font-bold text-[#0a1628]">Misi</h4>
+          </div>
+          <ul class="space-y-2">
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Menjadikan BEM sebagai wadah ruang diskusi dan bertukar fikiran yang relatif dan fleksibel.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Meningkatkan partisipasi mahasiswa dalam kegiatan BEM dan Organisasi mahasiswa.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Meningkatkan kesadaran dan kepedulian mahasiswa terhadap isu sosial dan lingkungan.</span></li>
+           <li class="flex items-start gap-2"><span class="w-1.5 h-1.5 bg-[#1e3a5f] rounded-full mt-1.5 flex-shrink-0"></span> <span class="text-slate-700 leading-relaxed text-sm">Meningkatkan kerjasama dengan lembaga dan organisasi eksternal.</span></li>
+          </ul>
+         </div><!-- Vote Button -->
+         <div class="mt-4 pt-4 border-t border-slate-200"><button onclick="pilihCalon(4)" class="w-full bg-gradient-to-r from-[#1e3a5f] to-[#2d5a87] hover:from-[#0d2137] hover:to-[#1e3a5f] text-white font-bold py-3 px-6 rounded-xl shadow-lg hover:shadow-xl transition-all transform hover:scale-105 flex items-center justify-center gap-2">
+           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+           </svg><span>PILIH CALON INI</span> </button>
+         </div>
+        </div>
+       </div>
+      </article>
+     </div>
+    </div>
+   </section><!-- Call to Action Section -->
+   <section class="gradient-navy py-12 relative overflow-hidden">
+    <div class="absolute inset-0">
+     <div class="absolute top-5 right-5 w-40 h-40 bg-blue-400/10 rounded-full blur-2xl"></div>
+     <div class="absolute bottom-5 left-5 w-48 h-48 bg-blue-300/10 rounded-full blur-2xl"></div>
+    </div>
+    <div class="relative z-10 max-w-2xl mx-auto px-5 text-center">
+     <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm px-3 py-1.5 rounded-full mb-4">
+      <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg><span class="text-emerald-300 text-xs font-medium">Suaramu Menentukan</span>
+     </div>
+     <h2 class="text-xl font-extrabold text-white mb-3">Satu Suara, Satu Perubahan</h2>
+     <p class="text-blue-100/80 text-sm mb-6">Pilih pemimpin yang akan membawa BEM Universitas Darunnajah Kampus 4 menuju masa depan yang lebih baik</p><a href="#calon" class="inline-flex items-center gap-2 bg-white text-[#1e3a5f] font-bold px-6 py-3 rounded-full shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all text-sm">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+      </svg><span>Lihat Calon Lagi</span> </a>
+    </div>
+   </section><!-- Footer -->
+   <footer class="bg-[#0a1628] border-t border-white/10">
+    <div class="max-w-2xl mx-auto px-5 py-6">
+     <div class="flex flex-col items-center gap-3 text-center">
+      <div class="flex items-center gap-2">
+       <div class="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center">
+        <svg class="w-5 h-5 text-white" viewbox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+        </svg>
+       </div>
+       <div>
+        <p class="text-white font-bold text-xs">BEM Universitas Darunnajah</p>
+        <p class="text-blue-200/60 text-xs">Kampus 4</p>
+       </div>
+      </div>
+      <p id="footer-text" class="text-blue-200/60 text-xs">© 2025 BEM Universitas Darunnajah Kampus 4. All rights reserved.</p>
+     </div>
+    </div>
+   </footer>
+  </div>
+  <script>
+    const defaultConfig = {
+      main_title: 'Pemilihan Ketua BEM Universitas Darunnajah Kampus 4',
+      subtitle: 'Periode 2026-2027',
+      footer_text: '© 2025 BEM Universitas Darunnajah Kampus 4. All rights reserved.'
+    };
+
+    let config = { ...defaultConfig };
+
+    async function onConfigChange(newConfig) {
+      config = { ...config, ...newConfig };
+      
+      const mainTitle = config.main_title || defaultConfig.main_title;
+      const titleParts = mainTitle.split(' ');
+      let formattedTitle = mainTitle;
+      
+      if (mainTitle.includes('Universitas')) {
+        const uniIndex = titleParts.indexOf('Universitas');
+        if (uniIndex > 0) {
+          const beforeUni = titleParts.slice(0, uniIndex).join(' ');
+          const afterUni = titleParts.slice(uniIndex).join(' ');
+          formattedTitle = `${beforeUni}<br/><span class="text-blue-300">${afterUni}</span>`;
+        }
+      }
+      
+      document.getElementById('main-title').innerHTML = formattedTitle;
+      document.getElementById('subtitle').textContent = config.subtitle || defaultConfig.subtitle;
+      document.getElementById('footer-text').textContent = config.footer_text || defaultConfig.footer_text;
+    }
+
+    function mapToCapabilities(cfg) {
+      return {
+        recolorables: [],
+        borderables: [],
+        fontEditable: undefined,
+        fontSizeable: undefined
+      };
+    }
+
+    function mapToEditPanelValues(cfg) {
+      return new Map([
+        ['main_title', cfg.main_title || defaultConfig.main_title],
+        ['subtitle', cfg.subtitle || defaultConfig.subtitle],
+        ['footer_text', cfg.footer_text || defaultConfig.footer_text]
+      ]);
+    }
+
+    if (window.elementSdk) {
+      window.elementSdk.init({
+        defaultConfig,
+        onConfigChange,
+        mapToCapabilities,
+        mapToEditPanelValues
+      });
+    }
+  </script>
+<script>
+</script>
+  <!-- MODAL KONFIRMASI PILIHAN -->
+<div id="confirmModal" class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl text-center">
+    <h3 class="text-lg font-bold text-[#1e3a5f] mb-3">
+      Konfirmasi Pilihan
+    </h3>
+    <p id="confirmText" class="text-slate-700 mb-6">
+      Apakah Anda yakin memilih calon no ?
+    </p>
+
+    <div class="flex gap-3">
+      <button onclick="batalPilih()"
+        class="flex-1 border border-slate-300 text-slate-600 py-2 rounded-lg hover:bg-slate-100 transition">
+        Tidak
+      </button>
+      <button onclick="yakinPilih()"
+        class="flex-1 bg-[#1e3a5f] text-white py-2 rounded-lg hover:bg-[#0d2137] transition font-bold">
+        Yakin
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL TERIMA KASIH -->
+<div id="thanksModal" class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div class="bg-white rounded-2xl p-6 w-full max-w-sm shadow-2xl text-center">
+    <h3 class="text-lg font-bold text-[#1e3a5f] mb-3">
+      Terima Kasih
+    </h3>
+    <p class="text-slate-700 mb-5">
+      Terima kasih telah memilih.<br>
+      <b>Suaramu berarti.</b>
+    </p>
+    <button onclick="tutupThanks()"
+      class="w-full bg-[#1e3a5f] text-white py-2 rounded-lg font-bold hover:bg-[#0d2137] transition">
+      Tutup
+    </button>
+  </div>
+</div>
+<script>
+let calonDipilih = null;
+
+function pilihCalon(no) {
+  calonDipilih = no;
+
+  document.getElementById("confirmText").innerText =
+    `Apakah Anda yakin memilih calon no ${no}?`;
+
+  document.getElementById("confirmModal").classList.remove("hidden");
+  document.getElementById("confirmModal").classList.add("flex");
+}
+
+function batalPilih() {
+  calonDipilih = null;
+  document.getElementById("confirmModal").classList.add("hidden");
+}
+
+function yakinPilih() {
+  const nimAktif = localStorage.getItem("nimAktif");
+  if (!nimAktif) {
+    alert("Silakan login terlebih dahulu");
+    return;
+  }
+
+  // Format identitas yang kamu simpan: "22011013-S7", misalnya
+  const [nim, semester] = nimAktif.split("-S");
+
+  // Simpan vote lokal
+  votes[calonDipilih]++;
+  daftarPemilih.push(nimAktif);
+
+  localStorage.setItem("votes", JSON.stringify(votes));
+  localStorage.setItem("daftarPemilih", JSON.stringify(daftarPemilih));
+
+  // 🔗 KIRIM KE GOOGLE FORM
+  // Pastikan format teks calon sesuai pilihan di form
+  const calonText = `Calon ${calonDipilih}`;
+
+  kirimKeGForm(
+    nim,
+    `Semester ${semester}`,
+    calonText
+  );
+
+  // Tutup modal konfirmasi
+  document.getElementById("confirmModal").classList.add("hidden");
+
+  // Tampilkan modal terima kasih
+  document.getElementById("thanksModal").classList.remove("hidden");
+  document.getElementById("thanksModal").classList.add("flex");
+}
+</script>
+<script>
+function kirimKeGForm(nim, semester, calon) {
+  const formURL = "https://docs.google.com/forms/d/e/1FAIpQLSdGaWKYTNR-_LQik-Er0GssExt_P9ihWpJptZkwQeaLMo1N_w/formResponse";
+
+  const data = new FormData();
+  data.append("entry.1651012758", nim);      // NIM
+  data.append("entry.931805077", semester);   // Semester
+  data.append("entry.89551474", calon);       // Calon
+
+  fetch(formURL, {
+    method: "POST",
+    body: data,
+    mode: "no-cors"
+  });
+}
+</script>
+
+</body>
+</html>
